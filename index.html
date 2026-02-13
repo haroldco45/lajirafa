@@ -3,204 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App La Jirafa - Pedidos</title>
+    <title>App La Jirafa - Catálogo Completo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --amarillo-jirafa: #fbc02d;
-            --morado-jirafa: #4a3b8d;
-        }
-        
-        /* Fondo con la imagen de la jirafa */
+        :root { --amarillo: #fbc02d; --morado: #4a3b8d; }
         body { 
             background-color: #fffde7; 
             background-image: url('la-jirafa.png');
             background-repeat: no-repeat;
-            background-position: center;
+            background-position: center 200px;
             background-attachment: fixed;
-            background-size: 80% auto; /* Ajusta el tamaño de la jirafa de fondo */
-            position: relative;
+            background-size: 80% auto;
         }
-
-        /* Capa para aclarar el fondo y que se vea como marca de agua */
         body::before {
-            content: "";
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(255, 253, 231, 0.85); /* Controla la transparencia aquí */
-            z-index: -1;
+            content: ""; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255, 253, 231, 0.88); z-index: -1;
         }
-
-        .bg-jirafa { background-color: var(--amarillo-jirafa); }
-        .text-morado { color: var(--morado-jirafa); }
-        .border-morado { border-color: var(--morado-jirafa); }
-        
+        .bg-jirafa { background-color: var(--amarillo); }
+        .text-morado { color: var(--morado); }
         .btn-cantidad {
-            background-color: var(--morado-jirafa);
-            color: white;
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            background-color: var(--morado);
+            color: white; width: 30px; height: 30px;
+            border-radius: 6px; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
         }
-
-        input, textarea { background: rgba(255, 255, 255, 0.9) !important; }
     </style>
 </head>
 <body class="pb-40">
 
     <header class="bg-jirafa p-4 shadow-lg text-center sticky top-0 z-50">
-        <img src="la-jirafa.png" alt="Logo La Jirafa" class="mx-auto h-20 mb-1">
-        <h1 class="text-xl font-bold text-morado">SISTEMA DE PEDIDOS</h1>
+        <img src="la-jirafa.png" alt="Logo" class="mx-auto h-16 mb-1">
+        <h1 class="text-lg font-bold text-morado tracking-tighter">LA JIRAFA - PEDIDOS</h1>
     </header>
 
     <section class="p-4 max-w-xl mx-auto">
-        <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-md border-l-4 border-morado">
-            <h2 class="font-bold text-morado mb-3 uppercase text-xs">Información de Entrega</h2>
+        <div class="bg-white/90 p-4 rounded-xl shadow-md border-l-4 border-purple-800">
             <div class="grid grid-cols-1 gap-2">
-                <input type="text" id="nombre" placeholder="Nombre completo" class="border p-2 rounded w-full text-sm outline-none focus:ring-2 focus:ring-yellow-500">
-                <input type="text" id="local" placeholder="Nombre del Local" class="border p-2 rounded w-full text-sm outline-none focus:ring-2 focus:ring-yellow-500">
-                <input type="text" id="direccion" placeholder="Dirección de envío" class="border p-2 rounded w-full text-sm outline-none focus:ring-2 focus:ring-yellow-500">
-                <input type="tel" id="celular" placeholder="Celular de contacto" class="border p-2 rounded w-full text-sm outline-none focus:ring-2 focus:ring-yellow-500">
-                <textarea id="observaciones" placeholder="Observaciones (Ej: Horario de entrega...)" class="border p-2 rounded w-full text-sm outline-none focus:ring-2 focus:ring-yellow-500"></textarea>
+                <input type="text" id="nombre" placeholder="Nombre Cliente" class="border p-2 rounded w-full text-sm outline-none">
+                <input type="text" id="local" placeholder="Nombre del Local" class="border p-2 rounded w-full text-sm outline-none">
+                <input type="text" id="direccion" placeholder="Dirección" class="border p-2 rounded w-full text-sm outline-none">
+                <input type="tel" id="celular" placeholder="Celular" class="border p-2 rounded w-full text-sm outline-none">
+                <textarea id="observaciones" placeholder="Observaciones..." class="border p-2 rounded w-full text-sm outline-none"></textarea>
             </div>
         </div>
     </section>
 
-    <main class="p-4 max-w-xl mx-auto" id="lista-productos">
-        </main>
+    <main class="p-4 max-w-xl mx-auto" id="lista-productos"></main>
 
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-morado p-4 shadow-2xl z-50">
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-purple-800 p-4 shadow-2xl z-50">
         <div class="max-w-xl mx-auto flex justify-between items-center mb-2">
             <div>
-                <p class="text-[10px] text-gray-500 font-bold uppercase">Pedido #<span id="num-pedido-display">1</span> - <span id="fecha-actual"></span></p>
-                <p class="text-2xl font-black text-morado">TOTAL: $<span id="total-pedido">0</span></p>
+                <p class="text-[10px] text-gray-500 font-bold">PEDIDO #<span id="num-p">1</span> - <span id="fecha"></span></p>
+                <p class="text-xl font-black text-purple-900">TOTAL: $<span id="total-p">0</span></p>
             </div>
-            <button onclick="enviarWhatsApp()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-5 rounded-xl flex items-center gap-2 shadow-lg transition-transform active:scale-95">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
-                    <path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.59-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34-.114-.007-.247-.007-.38-.007a.729.729 0 0 0-.529.247c-.182.198-.691.677-.691 1.654 0 .977.71 1.916.81 2.049.098.133 1.394 2.132 3.383 2.992.47.205.84.326 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232z"/>
-                </svg>
-                ENVIAR
-            </button>
+            <button onclick="enviarWhatsApp()" class="bg-green-600 text-white font-bold py-3 px-6 rounded-xl shadow-lg">ENVIAR</button>
         </div>
-        <p class="text-[9px] text-center text-gray-400 font-bold uppercase tracking-widest">
-            App desarrollada por Vibras Positivas © Derechos de Autor
-        </p>
+        <p class="text-[9px] text-center text-gray-400 font-bold italic">App desarrollada por Vibras Positivas © Derechos de Autor</p>
     </div>
 
     <script>
-        // LISTA DE PRODUCTOS (Basada en tu imagen)
         const productos = [
-            { ref: "18740", med: "DPK", nombre: "DETERGEN ESP LIQ BEBE DPK 10*1000ML", valor: 7010 },
-            { ref: "13857", med: "UND", nombre: "DETERGEN LIQ CONCETRAD JIRAFA 4*4LT", valor: 36220 },
-            { ref: "14491", med: "UND", nombre: "DETERGENTE ESP LIQ LAVAND 10*1000ML", valor: 6900 },
-            { ref: "18741", med: "UND", nombre: "DETERGENTE ESP LIQ BEBE 4*4LT", valor: 28000 },
-            { ref: "18576", med: "UND", nombre: "DETERGENTE ESP LIQ LAVANDA 4*4LT", valor: 28000 },
-            { ref: "836", med: "CAJA", nombre: "JIRAFA ESPE COCO 25UND*200GR", valor: 51000 },
-            { ref: "831", med: "CAJA", nombre: "JIRAFA ESPEC ALOE VERA 10*3*250G", valor: 56650 },
-            { ref: "4277", med: "CAJA", nombre: "JIRAFA ESPEC AZUL LIMON 10*3*250G", valor: 56650 },
-            { ref: "18421", med: "UND", nombre: "LAVAPLATO JIRAFA LIQ LIMON 12*630ML", valor: 6250 },
-            { ref: "19675", med: "UND", nombre: "LIMPIAPISO JIRAFA CITRICO 12*1LT", valor: 4400 },
-            { ref: "16859", med: "UND", nombre: "SUAVIZANTE JIRAFA FRES LAVANDA 4*4L", valor: 21950 }
+            { ref: "18740", med: "DPK", nombre: "DETERGEN ESP LIQ BEBE DPK 10*1000ML F311", valor: 7010 },
+            { ref: "13857", med: "UND", nombre: "DETERGEN LIQ CONCETRAD JIRAFA 4*4LT E004", valor: 36220 },
+            { ref: "14491", med: "UND", nombre: "DETERGENTE ESP LIQ LAVAND 10*1000ML F301", valor: 6900 },
+            { ref: "18741", med: "UND", nombre: "DETERGENTE ESP LIQ BEBE 4*4LT F313", valor: 28000 },
+            { ref: "18576", med: "UND", nombre: "DETERGENTE ESP LIQ LAVANDA 4*4LT F303", valor: 28000 },
+            { ref: "19597", med: "TARRO", nombre: "JABON BARRA LIQ MAX CITR 24*500ML 30A106", valor: 3250 },
+            { ref: "19091", med: "TARRO", nombre: "JABON BARRA LIQ MAXIMO CITR 12*1L 30A102", valor: 6200 },
+            { ref: "19160", med: "TARRO", nombre: "JABON BARRA LIQ MAXIMO CITRI 4*4LT A104", valor: 20260 },
+            { ref: "19090", med: "TARRO", nombre: "JABON BARRA LIQ MAXIMO FLOR12*1LT 30A101", valor: 6200 },
+            { ref: "19161", med: "TARRO", nombre: "JABON BARRA LIQ MAXIMO FLORAL4*4LT A103", valor: 20260 },
+            { ref: "836", med: "CAJA", nombre: "JIRAFA ESPE COCO 25UND*200GR P001", valor: 51000 },
+            { ref: "831", med: "CAJA", nombre: "JIRAFA ESPEC ALOE VERA 10*3*250G 30F002", valor: 56650 },
+            { ref: "4277", med: "CAJA", nombre: "JIRAFA ESPEC AZUL LIMON 10*3*250G 30F032", valor: 56650 },
+            { ref: "13107", med: "CAJA", nombre: "JIRAFA ESPECIAL ALOE VERA 24*250G 30F001", valor: 47150 },
+            { ref: "13095", med: "CAJA", nombre: "JIRAFA ESPECIAL AZUL LIMO 24*250G 30F031", valor: 47150 },
+            { ref: "4278", med: "CAJA", nombre: "JIRAFA ESPECIAL BEBE 10*3*250G F012", valor: 58950 },
+            { ref: "13094", med: "CAJA", nombre: "JIRAFA ESPECIAL BEBE 24*250G 30F011", valor: 47150 },
+            { ref: "16827", med: "CAJA", nombre: "JIRAFA ESPECIAL BICARBONATO 25*200G", valor: 35150 },
+            { ref: "834", med: "CAJA", nombre: "JIRAFA ESPECIAL LAVANDA 10*3*250G 30F022", valor: 58950 },
+            { ref: "13093", med: "CAJA", nombre: "JIRAFA ESPECIAL LAVANDA 24*250G 30F021", valor: 47150 },
+            { ref: "833", med: "CAJA", nombre: "JIRAFA ESPECIAL STDO 10*5*250GR 30F203", valor: 98230 },
+            { ref: "19678", med: "CAJA", nombre: "JIRAFA ESPECIAL SURTIDO 24*250G 30F207", valor: 47150 },
+            { ref: "4932", med: "CAJA", nombre: "JIRAFA MAXIMO 10*2*450GR A002", valor: 58500 },
+            { ref: "4894", med: "CAJA", nombre: "JIRAFA MAXIMO 12UND*450GR 30A001", valor: 35100 },
+            { ref: "841", med: "CAJA", nombre: "JIRAFA ROMBO MEDIANO 25*200GR 30T001", valor: 30150 },
+            { ref: "843", med: "CAJA", nombre: "JIRAFA SUPER ROMBO AZUL 24*300G 30T002", valor: 44800 },
+            { ref: "18421", med: "UND", nombre: "LAVAPLATO JIRAFA LIQ LIMON 12*630ML E101", valor: 6250 },
+            { ref: "13860", med: "UND", nombre: "LAVAPLATO JIRAX LIMON 24*500G 30T202", valor: 4000 },
+            { ref: "19675", med: "UND", nombre: "LIMPIAPISO JIRAFA CITRICO 12*1LT E303", valor: 4400 },
+            { ref: "19674", med: "UND", nombre: "LIMPIAPISO JIRAFA CITRICO 24*500ML E301", valor: 2700 },
+            { ref: "19676", med: "UND", nombre: "LIMPIAPISO JIRAFA LAVAND 24*500ML E311", valor: 2420 },
+            { ref: "16859", med: "UND", nombre: "SUAVIZANTE JIRAFA FRES LAVANDA 4*4L E205", valor: 21950 },
+            { ref: "16860", med: "UND", nombre: "SUAVIZANTE JIRAFA FRESC LAVANDA 6*1.8L", valor: 10900 },
+            { ref: "18062", med: "DPK", nombre: "SUAVIZANTE JIRAFA LAVAND DPK 10*1LT E203", valor: 5500 },
+            { ref: "18061", med: "DPK", nombre: "SUAVIZANTE JIRAFA P/TROPI DPK10*1LT E212", valor: 5500 },
+            { ref: "16876", med: "UND", nombre: "SUAVIZANTE JIRAFA P/TROPICA 6*1.8L E213", valor: 10860 },
+            { ref: "16861", med: "UND", nombre: "SUAVIZANTE JIRAFA PLACE TROPI 4*4LT E214", valor: 21900 }
         ];
 
         let pedido = {};
-        let numPedido = localStorage.getItem('jirafa_num_p') || 1;
-        document.getElementById('num-pedido-display').innerText = numPedido;
+        let numPedido = localStorage.getItem('jirafa_n') || 1;
+        document.getElementById('num-p').innerText = numPedido;
+        document.getElementById('fecha').innerText = new Date().toLocaleDateString('es-CO');
 
-        // Fecha Colombia
-        function mostrarFecha() {
-            const f = new Date();
-            document.getElementById('fecha-actual').innerText = f.toLocaleDateString('es-CO');
-        }
-        mostrarFecha();
-
-        // Renderizar Lista
         const lista = document.getElementById('lista-productos');
         productos.forEach(p => {
-            const card = document.createElement('div');
-            card.className = "bg-white/90 p-3 rounded-lg shadow-sm mb-2 flex items-center justify-between border border-gray-100";
-            card.innerHTML = `
+            const div = document.createElement('div');
+            div.className = "bg-white/95 p-3 rounded-lg shadow-sm mb-2 flex items-center justify-between border border-gray-100";
+            div.innerHTML = `
                 <div class="flex-1 pr-2">
-                    <p class="text-[9px] text-gray-500 font-bold italic">${p.ref} | ${p.med}</p>
-                    <h3 class="text-xs font-bold text-gray-800 leading-tight">${p.nombre}</h3>
-                    <p class="text-morado font-black mt-1">$${p.valor.toLocaleString()}</p>
+                    <p class="text-[9px] text-gray-400 font-bold">${p.ref} | ${p.med}</p>
+                    <h3 class="text-[11px] font-bold text-gray-800 leading-tight uppercase">${p.nombre}</h3>
+                    <p class="text-purple-800 font-black text-sm">$${p.valor.toLocaleString()}</p>
                 </div>
-                <div class="flex items-center gap-2 bg-gray-50 p-1 rounded-lg">
-                    <button onclick="update('${p.ref}', -1)" class="btn-cantidad">-</button>
-                    <span id="q-${p.ref}" class="font-bold text-sm w-5 text-center text-morado">0</span>
-                    <button onclick="update('${p.ref}', 1)" class="btn-cantidad">+</button>
+                <div class="flex items-center gap-2">
+                    <button onclick="upd('${p.ref}', -1)" class="btn-cantidad">-</button>
+                    <span id="q-${p.ref}" class="font-bold text-sm w-4 text-center">0</span>
+                    <button onclick="upd('${p.ref}', 1)" class="btn-cantidad">+</button>
                 </div>
             `;
-            lista.appendChild(card);
+            lista.appendChild(div);
         });
 
-        function update(ref, val) {
-            if (!pedido[ref]) {
-                const p = productos.find(x => x.ref === ref);
-                pedido[ref] = { ...p, cant: 0 };
-            }
-            pedido[ref].cant = Math.max(0, pedido[ref].cant + val);
+        function upd(ref, v) {
+            if (!pedido[ref]) pedido[ref] = { ...productos.find(x => x.ref === ref), cant: 0 };
+            pedido[ref].cant = Math.max(0, pedido[ref].cant + v);
             document.getElementById(`q-${ref}`).innerText = pedido[ref].cant;
-            calc();
-        }
-
-        function calc() {
             let total = 0;
             for (let k in pedido) total += pedido[k].cant * pedido[k].valor;
-            document.getElementById('total-pedido').innerText = total.toLocaleString();
+            document.getElementById('total-p').innerText = total.toLocaleString();
         }
 
         function enviarWhatsApp() {
             const n = document.getElementById('nombre').value;
             const l = document.getElementById('local').value;
-            if (!n || !l) return alert("Completa Nombre y Local");
+            if (!n || !l) return alert("Faltan datos");
 
-            let items = "";
-            let granTotal = 0;
-
+            let items = "", granTotal = 0;
             for (let k in pedido) {
                 if (pedido[k].cant > 0) {
                     let sub = pedido[k].cant * pedido[k].valor;
                     granTotal += sub;
-                    items += `📌 ${pedido[k].nombre}\n`;
-                    items += `Ref: ${pedido[k].ref} | Cant: ${pedido[k].cant} x $${pedido[k].valor.toLocaleString()}\n`;
-                    items += `Subtotal: $${sub.toLocaleString()}\n`;
-                    items += `--------------------------\n`;
+                    items += `🔸 ${pedido[k].nombre}\nRef: ${pedido[k].ref} | Cant: ${pedido[k].cant} x $${pedido[k].valor.toLocaleString()}\nSub: $${sub.toLocaleString()}\n\n`;
                 }
             }
+            if (granTotal === 0) return alert("Pedido vacío");
 
-            if (granTotal === 0) return alert("No has seleccionado productos");
-
-            const fecha = new Date().toLocaleString('es-CO');
-            const obs = document.getElementById('observaciones').value || "Sin observaciones";
-            
-            const texto = `*ORDEN DE PEDIDO # ${numPedido}*
-*EMPRESA:* LA JIRAFA
-*FECHA:* ${fecha}
-
-*CLIENTE:* ${n}
-*LOCAL:* ${l}
-*DIR:* ${document.getElementById('direccion').value}
-*CEL:* ${document.getElementById('celular').value}
-
---------------------------
-${items}
-*TOTAL A PAGAR: $${granTotal.toLocaleString()}*
---------------------------
-*NOTAS:* ${obs}
-
-_App desarrollada por Vibras Positivas ©_
-_Derechos de Autor_`;
-
+            const texto = `*ORDEN DE PEDIDO # ${numPedido}*\n*CLIENTE:* ${n}\n*LOCAL:* ${l}\n*TOTAL: $${granTotal.toLocaleString()}*\n\n${items}_Vibras Positivas ©_`;
             window.open(`https://wa.me/573117700431?text=${encodeURIComponent(texto)}`, '_blank');
-            
-            numPedido++;
-            localStorage.setItem('jirafa_num_p', numPedido);
-            document.getElementById('num-pedido-display').innerText = numPedido;
+            numPedido++; localStorage.setItem('jirafa_n', numPedido);
+            location.reload();
         }
     </script>
 </body>
